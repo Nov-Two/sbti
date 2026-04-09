@@ -27,7 +27,7 @@ useSeoMeta({
     <TopNavBar />
 
     <UMain>
-      <Main />
+      <NuxtPage />
     </UMain>
 
     <Footer />

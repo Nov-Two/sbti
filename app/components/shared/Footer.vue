@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const links = [
+  { label: 'GitHub', to: 'https://github.com/Nov-Two/sbti', target: '_blank' },
   { label: 'Privacy', to: '#' },
   { label: 'Terms', to: '#' },
   { label: 'Support', to: '#' }
@@ -21,6 +22,8 @@ const links = [
           v-for="link in links"
           :key="link.label"
           :to="link.to"
+          :target="link.target"
+          :rel="link.target === '_blank' ? 'noopener noreferrer' : undefined"
           class="font-mono text-xs tracking-widest text-slate-500 uppercase underline decoration-slate-600 underline-offset-4 hover:text-slate-400"
         >
           {{ link.label }}

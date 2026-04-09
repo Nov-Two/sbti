@@ -3,7 +3,7 @@ const route = useRoute()
 
 const items = computed(() => [
   { label: 'Home', to: '/', active: route.path === '/' },
-  // { label: 'Test', to: '/test', active: route.path === '/test' },
+  { label: 'Test', to: '/test', active: route.path === '/test' },
   { label: 'About', to: '/about', active: route.path === '/about' }
 ])
 </script>

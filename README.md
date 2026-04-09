@@ -1,98 +1,41 @@
-# Nuxt Landing Template
+# SBTI · 抽象怪·究极逆天版
 
-[![Nuxt UI](https://img.shields.io/badge/Made%20with-Nuxt%20UI-00DC82?logo=nuxt&labelColor=020420)](https://ui.nuxt.com)
+SBTI 是一个专为当代赛博网民设计的“精神污染”人格测试系统。它不仅仅是一个测试，更是一面照向灵魂深处的赛博镜子。
 
-Use this template to build your own landing page with [Nuxt UI](https://ui.nuxt.com) quickly.
+## 🌟 项目核心功能
 
-- [Live demo](https://landing-template.nuxt.dev/)
-- [Documentation](https://ui.nuxt.com/docs/getting-started/installation/nuxt)
+- **30道赛博精选题**：深入挖掘你的潜意识，涵盖群聊发癫、职场牛马、前任官宣、赛博动物选择等多种生活化场景。
+- **6大核心维度分析**：
+  - **抽象怪**：乐子人、逆天整活、发癫专家。
+  - **杠精**：阴阳怪气、怼人、键盘侠降维打击。
+  - **圣母送钱**：圣母心、帮大哥、人形 ATM。
+  - **摆烂自闭**：终极躺平、社死、人生已读不回。
+  - **修狗冤种**：舔狗、接盘侠、究极冤种。
+  - **小丑帝**：自我娱乐、社死王、帝王级小丑。
+- **深度鉴定报告**：生成详细的匹配度分析，包含主标签、TOP 标签排行以及隐藏彩蛋触发。
+- **隐藏彩蛋系统**：根据你的维度得分，解锁如“核弹级抽象怪”、“嘴炮之王”等极致荣誉。
 
-<a href="https://landing-template.nuxt.dev/" target="_blank">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://ui.nuxt.com/assets/templates/nuxt/landing-dark.png">
-    <source media="(prefers-color-scheme: light)" srcset="https://ui.nuxt.com/assets/templates/nuxt/landing-light.png">
-    <img alt="Nuxt Landing Template" src="https://ui.nuxt.com/assets/templates/nuxt/landing-light.png">
-  </picture>
-</a>
+## 🎯 解决的问题
 
-## Quick Start
+在充斥着各种正经性格测试的互联网时代，SBTI 解决了：
 
-```bash [Terminal]
-npm create nuxt@latest -- -t ui/landing
-```
+- **无趣的性格标签**：不再是枯燥的四个字母，而是更贴近现代网民社交语境的鲜活形象。
+- **社交互动缺失**：通过极具传播力的“阴阳怪气”文案，激发用户分享欲，让朋友间一起“破防”。
+- **真实的自我审视**：以幽默荒诞的方式，让用户反思自己在网络社交中的真实行为模式。
 
-## Deploy your own
+## 🚀 使用场景
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-name=sbti&repository-url=https%3A%2F%2Fgithub.com%2FNov-Two%2Fsbti.git&demo-image=https%3A%2F%2Fui.nuxt.com%2Fassets%2Ftemplates%2Fnuxt%2Flanding-dark.png&demo-url=https%3A%2F%2Flanding-template.nuxt.dev%2F&demo-title=Nuxt%20Landing%20Template&demo-description=A%20modern%20landing%20page%20template%20powered%20by%20Nuxt%20Content.)
+- **群聊破冰**：在死气沉沉的群聊中甩出一个测试链接，瞬间点燃讨论氛围。
+- **自我调侃**：在深夜 emo 或工作压力大时，通过测试进行一场赛博式的自我消解。
+- **好友互坑**：发给好兄弟/好闺蜜，看看谁才是那个深藏不露的“究极逆天版”。
 
-## Setup
+## 🛠️ 快速开始
 
-Make sure to install the dependencies:
+1. **克隆项目**
+2. **安装依赖**：`pnpm install`
+3. **启动开发服务器**：`pnpm dev`
+4. **浏览器访问**：`http://localhost:3000`
 
-```bash
-pnpm install
-```
+---
 
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-pnpm dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-pnpm build
-```
-
-Locally preview production build:
-
-```bash
-pnpm preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
-
-## Code Quality (ESLint + Prettier)
-
-This project uses:
-
-- ESLint (Nuxt flat config) for code quality
-- Prettier for formatting (including Tailwind class sorting)
-- Husky + lint-staged for pre-commit checks
-
-### One-liners
-
-```bash
-pnpm format
-pnpm lint
-pnpm lint:fix
-pnpm check
-```
-
-### VS Code (format on save)
-
-The repo includes [.vscode/settings.json](./.vscode/settings.json) so formatting runs on save:
-
-- Prettier formats files
-- ESLint applies non-format fixes via `source.fixAll.eslint`
-
-Recommended extensions:
-
-- `dbaeumer.vscode-eslint`
-- `esbenp.prettier-vscode`
-
-### Pre-commit
-
-After `pnpm install`, Husky installs Git hooks and `lint-staged` runs on every commit to:
-
-- format staged files with Prettier
-- fix & check staged files with ESLint
-
-## Renovate integration
-
-Install [Renovate GitHub app](https://github.com/apps/renovate/installations/select_target) on your repository and you are good to go.
+_本测试纯属整活，别当真，转发给朋友一起破防。_
