@@ -57,6 +57,42 @@ pnpm preview
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
 
+## Code Quality (ESLint + Prettier)
+
+This project uses:
+
+- ESLint (Nuxt flat config + Airbnb base) for code quality
+- Prettier for formatting (including Tailwind class sorting)
+- Husky + lint-staged for pre-commit checks
+
+### One-liners
+
+```bash
+pnpm format
+pnpm lint
+pnpm lint:fix
+pnpm check
+```
+
+### VS Code (format on save)
+
+The repo includes [.vscode/settings.json](./.vscode/settings.json) so formatting runs on save:
+
+- Prettier formats files
+- ESLint applies non-format fixes via `source.fixAll.eslint`
+
+Recommended extensions:
+
+- `dbaeumer.vscode-eslint`
+- `esbenp.prettier-vscode`
+
+### Pre-commit
+
+After `pnpm install`, Husky installs Git hooks and `lint-staged` runs on every commit to:
+
+- format staged files with Prettier
+- fix & check staged files with ESLint
+
 ## Renovate integration
 
 Install [Renovate GitHub app](https://github.com/apps/renovate/installations/select_target) on your repository and you are good to go.

@@ -7,7 +7,13 @@
     "dev": "nuxt dev",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
+    "prepare": "husky",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "lint-staged": "lint-staged",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "check": "pnpm run format:check && pnpm run lint && pnpm run typecheck",
     "typecheck": "nuxt typecheck"
   },
   "dependencies": {
@@ -24,8 +30,22 @@
   "devDependencies": {
     "@nuxt/eslint": "^1.15.2",
     "eslint": "^10.2.0",
+    "eslint-config-prettier": "^10.1.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.0",
+    "prettier": "^3.6.2",
+    "prettier-plugin-tailwindcss": "^0.6.14",
     "typescript": "^6.0.2",
     "vue-tsc": "^3.2.6"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,vue}": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "*.{css,scss,md,json,yml,yaml}": [
+      "prettier --write"
+    ]
   },
   "packageManager": "pnpm@10.33.0"
 }
