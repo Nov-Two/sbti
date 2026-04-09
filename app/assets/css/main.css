@@ -1,16 +1,16 @@
-@import "tailwindcss";
-@import "@nuxt/ui";
+@import 'tailwindcss';
+@import '@nuxt/ui';
 
 @theme static {
-  --font-sans: "Instrument Sans", -apple-system, sans-serif;
-  --font-mono: "IBM Plex Mono", monospace;
+  --font-sans: Inter, 'Instrument Sans', -apple-system, sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
 
   --color-lime-50: #f3fdeb;
   --color-lime-100: #e4fab3;
   --color-lime-200: #d0f588;
   --color-lime-300: #b5ed58;
-  --color-lime-400: #9fe870;
-  --color-lime-500: #78d343;
+  --color-lime-400: #9ee939;
+  --color-lime-500: #84cc16;
   --color-lime-600: #5aab2c;
   --color-lime-700: #448223;
   --color-lime-800: #376720;
@@ -24,4 +24,96 @@
   --ui-bg-elevated: #17181b;
   --ui-bg-accented: #2a2d31;
   --ui-border: #2a2d31;
+}
+
+.sbti-container {
+  margin-right: auto;
+  margin-left: auto;
+  max-width: 1280px;
+  padding-right: 32px;
+  padding-left: 32px;
+}
+
+.sbti-hero-container {
+  margin-right: auto;
+  margin-left: auto;
+  max-width: 1280px;
+  padding-right: 28px;
+  padding-left: 32px;
+}
+
+@media (max-width: 575px) {
+  .sbti-container,
+  .sbti-hero-container {
+    padding-right: 16px;
+    padding-left: 16px;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 767px) {
+  .sbti-container,
+  .sbti-hero-container {
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .sbti-container,
+  .sbti-hero-container {
+    padding-right: 24px;
+    padding-left: 24px;
+  }
+}
+
+.sbti-hero-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+@media (min-width: 992px) {
+  .sbti-hero-layout {
+    min-height: 700px;
+    flex-direction: row;
+    align-items: center;
+    gap: 44px;
+  }
+}
+
+@media (min-width: 992px) {
+  .sbti-hero-left {
+    width: 681px;
+  }
+
+  .sbti-hero-desc {
+    width: 576px;
+  }
+
+  .sbti-hero-btn {
+    width: 681px;
+    min-width: 681px;
+  }
+}
+
+.sbti-nav-mobile {
+  display: none;
+}
+
+@media (max-width: 575px) {
+  .sbti-nav-desktop {
+    display: none;
+  }
+
+  .sbti-nav-mobile {
+    display: block;
+  }
+}
+
+.sbti-nav-mobile summary::-webkit-details-marker {
+  display: none;
+}
+
+.sbti-nav-mobile summary::marker {
+  content: '';
 }
