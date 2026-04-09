@@ -2,6 +2,8 @@
 export default defineNuxtConfig({
   modules: ['@nuxt/eslint', '@nuxt/ui', '@vueuse/nuxt', 'motion-v/nuxt'],
 
+  components: [{ path: '~/components/shared', pathPrefix: false }],
+
   devtools: {
     enabled: true
   },
@@ -22,6 +24,13 @@ export default defineNuxtConfig({
         commaDangle: 'never',
         braceStyle: '1tbs'
       }
+    }
+  },
+
+  fonts: {
+    providers: {
+      google: false,
+      googleicons: false
     }
   }
 })
