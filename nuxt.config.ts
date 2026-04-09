@@ -2,9 +2,10 @@
 export default defineNuxtConfig({
   modules: [
     '@nuxt/eslint',
-    '@nuxt/image',
+    '@nuxt/content',
     '@nuxt/ui',
-    '@nuxt/content'
+    '@vueuse/nuxt',
+    'motion-v/nuxt'
   ],
 
   devtools: {
@@ -12,6 +13,11 @@ export default defineNuxtConfig({
   },
 
   css: ['~/assets/css/main.css'],
+
+  colorMode: {
+    preference: 'dark',
+    fallback: 'dark'
+  },
 
   mdc: {
     highlight: {

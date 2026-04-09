@@ -4,248 +4,345 @@ if (!page.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 }
 
+const title = page.value?.seo?.title || page.value?.title
+const description = page.value?.seo?.description || page.value?.description
+
 useSeoMeta({
-  title: page.value.seo?.title || page.value.title,
-  ogTitle: page.value.seo?.title || page.value.title,
-  description: page.value.seo?.description || page.value.description,
-  ogDescription: page.value.seo?.description || page.value.description
+  title,
+  ogTitle: title,
+  description,
+  ogDescription: description
 })
+
+const heroTitle = computed(() => {
+  const [primary = '', ...secondaryParts] = (page.value?.title ?? '').split('\n')
+
+  return {
+    primary,
+    secondary: secondaryParts.join(' ').trim()
+  }
+})
+
+function enterMotion(delay: number = 0) {
+  return {
+    initial: { opacity: 0, y: 16 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.6, delay }
+  }
+}
+
+function scrollMotion(delay: number = 0) {
+  return {
+    initial: { opacity: 0, y: 16 },
+    whileInView: { opacity: 1, y: 0 },
+    inViewOptions: { once: true, amount: 1 },
+    transition: { duration: 0.6, delay }
+  }
+}
+
+function staggerMotion(index: number = 0) {
+  return {
+    initial: { opacity: 0 },
+    whileInView: { opacity: 1 },
+    inViewOptions: { once: true, amount: 1 },
+    transition: { duration: 0.6, delay: index * 0.08 }
+  }
+}
+
+const { copy, copied } = useClipboard()
 </script>
 
 <template>
-  <div
-    v-if="page"
-    class="relative"
-  >
-    <div class="hidden lg:block">
-      <UColorModeImage
-        light="/images/light/line-1.svg"
-        dark="/images/dark/line-1.svg"
-        class="absolute pointer-events-none pb-10 left-0 top-0 object-cover h-[650px]"
-      />
-    </div>
-
+  <div v-if="page">
+    <!-- Hero -->
     <UPageHero
-      :description="page.description"
-      :links="page.hero.links"
       :ui="{
-        container: 'md:pt-18 lg:pt-20',
-        title: 'max-w-3xl mx-auto'
+        root: 'pb-24 sm:pb-32',
+        container: 'relative z-10 lg:py-32',
+        wrapper: 'flex flex-col items-center',
+        title: 'sm:text-6xl lg:text-7xl xl:text-[80px] tracking-tighter leading-[1.05]',
+        description: 'mt-5 max-w-xl mx-auto text-base sm:text-lg leading-relaxed',
+        links: 'gap-3'
       }"
     >
       <template #top>
-        <HeroBackground />
+        <Motion v-bind="staggerMotion(0)">
+          <HeroShaders class="absolute top-0 inset-x-0 opacity-15 h-full" />
+        </Motion>
+
+        <GradientGlow class="top-0 w-[800px] h-[600px]" />
       </template>
 
-      <template #title>
-        <MDC
-          :value="page.title"
-          unwrap="p"
-        />
-      </template>
-    </UPageHero>
-
-    <UPageSection
-      :description="page.section.description"
-      :features="page.section.features"
-      orientation="horizontal"
-      :ui="{
-        container: 'lg:px-0 2xl:px-20 mx-0 max-w-none md:mr-10',
-        features: 'gap-0'
-      }"
-      reverse
-    >
-      <template #title>
-        <MDC
-          :value="page.section.title"
-          class="sm:*:leading-11"
-        />
-      </template>
-      <img
-        :src="page.section.images.desktop"
-        :alt="page.section.title"
-        class="hidden lg:block 2xl:hidden left-0 w-full max-w-2xl"
-      >
-      <img
-        :src="page.section.images.mobile"
-        :alt="page.section.title"
-        class="block lg:hidden 2xl:block 2xl:w-full 2xl:max-w-2xl"
-      >
-    </UPageSection>
-
-    <USeparator :ui="{ border: 'border-primary/30' }" />
-
-    <UPageSection
-      id="features"
-      :description="page.features.description"
-      :features="page.features.features"
-      :ui="{
-        title: 'text-left @container relative flex',
-        description: 'text-left'
-      }"
-      class="relative overflow-hidden"
-    >
-      <div class="absolute rounded-full -left-10 top-10 size-[300px] z-10 bg-primary opacity-30 blur-[200px]" />
-      <div class="absolute rounded-full -right-10 -bottom-10 size-[300px] z-10 bg-primary opacity-30 blur-[200px]" />
-      <template #title>
-        <MDC
-          :value="page.features.title"
-          class="*:leading-9"
-        />
-        <div class="hidden @min-[1020px]:block">
-          <UColorModeImage
-            light="/images/light/line-2.svg"
-            dark="/images/dark/line-2.svg"
-            class="absolute top-0 right-0 size-full transform scale-95 translate-x-[70%]"
-          />
-        </div>
-      </template>
-    </UPageSection>
-
-    <USeparator :ui="{ border: 'border-primary/30' }" />
-
-    <UPageSection
-      id="steps"
-      :description="page.steps.description"
-      class="relative overflow-hidden"
-    >
       <template #headline>
-        <UColorModeImage
-          light="/images/light/line-3.svg"
-          dark="/images/dark/line-3.svg"
-          class="absolute -top-10 sm:top-0 right-1/2 h-24"
-        />
-      </template>
-      <template #title>
-        <MDC :value="page.steps.title" />
-      </template>
-
-      <template #features>
-        <UPageCard
-          v-for="(step, index) in page.steps.items"
-          :key="index"
-          class="group"
-          :ui="{ container: 'p-4 sm:p-4', title: 'flex items-center gap-1' }"
-        >
-          <UColorModeImage
-            v-if="step.image"
-            :light="step.image?.light"
-            :dark="step.image?.dark"
-            :alt="step.title"
-            class="size-full"
-          />
-
-          <div class="flex flex-col gap-2">
-            <span class="text-lg font-semibold">
-              {{ step.title }}
-            </span>
-            <span class="text-sm text-muted">
-              {{ step.description }}
-            </span>
-          </div>
-        </UPageCard>
-      </template>
-    </UPageSection>
-
-    <UPageSection
-      id="pricing"
-      class="mb-32 overflow-hidden"
-      :title="page.pricing.title"
-      :description="page.pricing.description"
-      :ui="{ title: 'text-left @container relative', description: 'text-left' }"
-    >
-      <template #title>
-        <MDC :value="page.pricing.title" />
-
-        <div class="hidden @min-[1120px]:block">
-          <UColorModeImage
-            light="/images/light/line-4.svg"
-            dark="/images/dark/line-4.svg"
-            class="absolute top-0 right-0 size-full transform translate-x-[60%]"
-          />
-        </div>
-      </template>
-
-      <UPricingPlans scale>
-        <UPricingPlan
-          v-for="(plan, index) in page.pricing.plans"
-          :key="index"
-          :title="plan.title"
-          :description="plan.description"
-          :price="plan.price"
-          :billing-period="plan.billing_period"
-          :billing-cycle="plan.billing_cycle"
-          :highlight="plan.highlight"
-          :scale="plan.highlight"
-          variant="soft"
-          :features="plan.features"
-          :button="plan.button"
-        />
-      </UPricingPlans>
-    </UPageSection>
-
-    <UPageSection
-      id="testimonials"
-      :title="page.testimonials.title"
-      :description="page.testimonials.description"
-      :items="page.testimonials.items"
-    >
-      <template #headline>
-        <UColorModeImage
-          light="/images/light/line-5.svg"
-          dark="/images/dark/line-5.svg"
-          class="absolute -top-10 sm:top-0 right-1/2 h-24"
-        />
-      </template>
-      <template #title>
-        <MDC :value="page.testimonials.title" />
-      </template>
-
-      <UContainer>
-        <UPageColumns class="xl:columns-3">
-          <UPageCard
-            v-for="(testimonial, index) in page.testimonials.items"
-            :key="index"
-            variant="subtle"
-            :description="testimonial.quote"
-            :ui="{ description: 'before:content-[open-quote] after:content-[close-quote]' }"
+        <Motion v-bind="enterMotion(0.2)">
+          <UBadge
+            color="neutral"
+            variant="soft"
+            :label="page.hero.headline"
+            class="rounded-full px-3 py-1.5"
           >
-            <template #footer>
-              <UUser
-                v-bind="testimonial.user"
-                size="xl"
+            <template #leading>
+              <UChip
+                inset
+                standalone
+                class="animate-pulse"
               />
             </template>
-          </UPageCard>
-        </UPageColumns>
-      </UContainer>
-    </UPageSection>
-
-    <USeparator />
-
-    <UPageCTA
-      v-bind="page.cta"
-      variant="naked"
-      class="overflow-hidden @container"
-    >
-      <template #title>
-        <MDC :value="page.cta.title" />
-
-        <div class="@max-[1280px]:hidden">
-          <UColorModeImage
-            light="/images/light/line-6.svg"
-            dark="/images/dark/line-6.svg"
-            class="absolute left-10 -top-10 sm:top-0 h-full"
-          />
-          <UColorModeImage
-            light="/images/light/line-7.svg"
-            dark="/images/dark/line-7.svg"
-            class="absolute right-0 bottom-0 h-full"
-          />
-        </div>
+          </UBadge>
+        </Motion>
       </template>
 
-      <LazyStarsBg />
+      <template #title>
+        <Motion
+          as="span"
+          v-bind="enterMotion(0.35)"
+          class="inline-block"
+        >
+          {{ heroTitle.primary }}
+          <br v-if="heroTitle.secondary">
+          <span
+            v-if="heroTitle.secondary"
+            class="bg-linear-to-br from-primary-400 via-primary-300 to-primary-200 bg-clip-text text-transparent"
+          >
+            {{ heroTitle.secondary }}
+          </span>
+        </Motion>
+      </template>
+
+      <template #description>
+        <Motion
+          as="span"
+          v-bind="enterMotion(0.5)"
+          class="inline-block"
+        >
+          {{ page.description }}
+        </Motion>
+      </template>
+
+      <template #links>
+        <Motion
+          class="flex justify-center gap-6"
+          v-bind="enterMotion(0.65)"
+        >
+          <UButton
+            v-for="link in page.hero.links"
+            :key="link.label"
+            v-bind="link"
+          />
+        </Motion>
+      </template>
+
+      <Motion
+        as-child
+        v-bind="enterMotion(0.85)"
+        class="max-w-2xl mx-auto w-full"
+      >
+        <HeroTerminal :lines="page.terminal.lines" />
+      </Motion>
+
+      <Motion
+        class="max-w-lg mx-auto w-full"
+        v-bind="scrollMotion(0.95)"
+      >
+        <UPageLogos
+          :title="page.logos.title"
+          :items="page.logos.items"
+          :ui="{
+            title: 'font-mono uppercase text-xs tracking-[0.12em] text-dimmed',
+            logo: 'text-muted size-6'
+          }"
+        />
+      </Motion>
+    </UPageHero>
+
+    <!-- Features -->
+    <UPageSection
+      id="features"
+      :ui="{
+        root: 'py-24 sm:py-32 scroll-mt-(--ui-header-height)',
+        container: 'max-w-5xl',
+        headline: 'font-mono font-medium text-xs text-primary uppercase tracking-[0.12em] text-center',
+        title: 'max-w-lg mx-auto',
+        description: 'max-w-md mx-auto text-dimmed'
+      }"
+    >
+      <template #headline>
+        <Motion
+          as="span"
+          v-bind="scrollMotion()"
+          class="inline-block"
+        >
+          {{ page.features.headline }}
+        </Motion>
+      </template>
+
+      <template #title>
+        <Motion
+          as="span"
+          v-bind="scrollMotion(0.1)"
+          class="inline-block"
+        >
+          {{ page.features.title }}
+        </Motion>
+      </template>
+
+      <template #description>
+        <Motion
+          as="span"
+          v-bind="scrollMotion(0.2)"
+          class="inline-block"
+        >
+          {{ page.features.description }}
+        </Motion>
+      </template>
+
+      <div class="rounded-2xl border border-default bg-default overflow-hidden">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px">
+          <Motion
+            v-for="(feature, index) in page.features.items"
+            :key="feature.title"
+            v-bind="staggerMotion(index)"
+          >
+            <UPageCard
+              :icon="feature.icon"
+              :title="feature.title"
+              :description="feature.description"
+              class="rounded-none duration-300"
+              to="#"
+              :ui="{
+                leading: 'mb-5 flex size-9 justify-center rounded-lg bg-primary/10',
+                title: 'text-sm tracking-tight',
+                description: 'text-sm leading-relaxed sm:line-clamp-2 lg:line-clamp-3 text-dimmed'
+              }"
+            />
+          </Motion>
+        </div>
+      </div>
+    </UPageSection>
+
+    <!-- Metrics -->
+    <UPageSection
+      id="metrics"
+      :ui="{
+        root: 'py-24 sm:py-32 scroll-mt-(--ui-header-height)',
+        container: 'max-w-5xl',
+        headline: 'font-mono font-medium text-xs text-primary uppercase tracking-[0.12em] text-center',
+        title: 'max-w-lg mx-auto',
+        description: 'max-w-md mx-auto text-dimmed'
+      }"
+    >
+      <template #headline>
+        <Motion
+          as="span"
+          v-bind="scrollMotion()"
+          class="inline-block"
+        >
+          {{ page.metrics.headline }}
+        </Motion>
+      </template>
+
+      <template #title>
+        <Motion
+          as="span"
+          v-bind="scrollMotion(0.1)"
+          class="inline-block"
+        >
+          {{ page.metrics.title }}
+        </Motion>
+      </template>
+
+      <template #description>
+        <Motion
+          as="span"
+          v-bind="scrollMotion(0.2)"
+          class="inline-block"
+        >
+          {{ page.metrics.description }}
+        </Motion>
+      </template>
+
+      <div class="rounded-2xl border border-default bg-default overflow-hidden">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-px">
+          <Motion
+            v-for="(metric, index) in page.metrics.items"
+            :key="metric.label"
+            v-bind="staggerMotion(index)"
+          >
+            <UPageCard
+              :title="metric.value"
+              :description="metric.label"
+              class="rounded-none duration-300"
+              to="#"
+              :ui="{
+                root: 'text-center',
+                wrapper: 'items-center',
+                title: ['text-4xl font-bold tracking-tight leading-none', metric.class],
+                description: 'font-mono text-xs uppercase tracking-[0.06em] text-dimmed mt-3'
+              }"
+            />
+          </Motion>
+        </div>
+      </div>
+    </UPageSection>
+
+    <!-- CTA -->
+    <UPageCTA
+      variant="naked"
+      :ui="{
+        root: 'py-24 sm:py-32',
+        container: 'max-w-3xl text-center',
+        title: 'lg:text-5xl tracking-tighter whitespace-pre-line',
+        description: 'mx-auto max-w-sm leading-relaxed text-dimmed'
+      }"
+    >
+      <template #top>
+        <GradientGlow class="bottom-0 w-[600px] h-[400px]" />
+      </template>
+
+      <template #title>
+        <Motion
+          as="span"
+          v-bind="scrollMotion()"
+          class="inline-block"
+        >
+          {{ page.cta.title }}
+        </Motion>
+      </template>
+
+      <template #description>
+        <Motion
+          as="span"
+          v-bind="scrollMotion(0.1)"
+          class="inline-block"
+        >
+          {{ page.cta.description }}
+        </Motion>
+      </template>
+
+      <template #links>
+        <Motion
+          class="flex flex-col items-center justify-center gap-6"
+          v-bind="scrollMotion(0.2)"
+        >
+          <UButton
+            v-for="link in page.cta.links"
+            :key="link.label"
+            v-bind="link"
+            size="xl"
+          />
+
+          <UButton
+            :label="page.cta.command"
+            :trailing-icon="copied ? 'i-lucide-copy-check' : 'i-lucide-copy'"
+            color="neutral"
+            variant="subtle"
+            class="font-mono font-light text-toned gap-4"
+            size="xl"
+            :ui="{ trailingIcon: 'size-5' }"
+            @click="copy(page.cta.command)"
+          />
+        </Motion>
+      </template>
     </UPageCTA>
   </div>
 </template>
