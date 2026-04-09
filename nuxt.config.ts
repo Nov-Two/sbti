@@ -2,7 +2,6 @@
 export default defineNuxtConfig({
   modules: [
     '@nuxt/eslint',
-    '@nuxt/content',
     '@nuxt/ui',
     '@vueuse/nuxt',
     'motion-v/nuxt'
@@ -13,12 +12,6 @@ export default defineNuxtConfig({
   },
 
   css: ['~/assets/css/main.css'],
-
-  mdc: {
-    highlight: {
-      noApiRoute: false
-    }
-  },
 
   compatibilityDate: '2025-01-15',
 

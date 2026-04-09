@@ -1,0 +1,89 @@
+* {
+  box-sizing: border-box;
+}
+
+.container2 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-width: 1px 0px 0px;
+  border-style: solid;
+  border-color: #42493626;
+  background: #131316;
+  padding: 48px 32px;
+  width: 1280px;
+  height: 149px;
+
+  .paragraph {
+    display: inline-flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    align-items: flex-start;
+    row-gap: 8px;
+
+    .text {
+      display: flex;
+      flex-shrink: 0;
+      align-items: center;
+      width: 45px;
+      height: 28px;
+      line-height: 28px;
+      letter-spacing: -1px;
+      color: #84cc16;
+      font-family: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", SimHei, Arial, Helvetica, sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .text2 {
+      display: flex;
+      flex-shrink: 0;
+      align-items: center;
+      width: 286px;
+      height: 16px;
+      line-height: 16px;
+      letter-spacing: 1.2px;
+      color: #64748b;
+      font-family: "IBM Plex Mono", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", SimHei, Arial, Helvetica, sans-serif;
+      font-size: 12px;
+      text-transform: UPPERCASE;
+    }
+  }
+
+  .container {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: flex-start;
+    column-gap: 48px;
+
+    .text3 {
+      display: flex;
+      flex-shrink: 0;
+      align-items: center;
+      width: 59px;
+      height: 16px;
+      line-height: 16px;
+      letter-spacing: 1.2px;
+      color: #64748b;
+      font-family: "IBM Plex Mono", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", SimHei, Arial, Helvetica, sans-serif;
+      font-size: 12px;
+      text-transform: UPPERCASE;
+      text-decoration: underline;
+    }
+
+    .text4 {
+      display: flex;
+      flex-shrink: 0;
+      align-items: center;
+      width: 42px;
+      height: 16px;
+      line-height: 16px;
+      letter-spacing: 1.2px;
+      color: #64748b;
+      font-family: "IBM Plex Mono", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", SimHei, Arial, Helvetica, sans-serif;
+      font-size: 12px;
+      text-transform: UPPERCASE;
+      text-decoration: underline;
+    }
+  }
+}

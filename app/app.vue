@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const colorMode = useColorMode()
 
-const color = computed(() => colorMode.value === 'dark' ? '#09090b' : 'white')
+const color = computed(() => colorMode.value === 'dark' ? '#101114' : 'white')
 
 useHead({
   meta: [
@@ -12,24 +12,26 @@ useHead({
     { rel: 'icon', href: '/favicon.ico' }
   ],
   htmlAttrs: {
-    lang: 'en'
+    lang: 'en',
+    class: 'dark'
   }
 })
 
 useSeoMeta({
-  ogImage: 'https://ui.nuxt.com/assets/templates/nuxt/landing-light.png',
+  title: 'SBTI - Discover your Kinetic potential.',
+  ogImage: '/images/mnrji1as-a2h0xjr.png',
   twitterCard: 'summary_large_image'
 })
 </script>
 
 <template>
   <UApp :toaster="{ expand: false }">
-    <AppHeader />
-
+    <TopNavBar />
+    
     <UMain>
-      <NuxtPage />
+      <Main />
     </UMain>
 
-    <AppFooter />
+    <Footer />
   </UApp>
 </template>
