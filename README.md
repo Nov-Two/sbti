@@ -61,7 +61,7 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 
 This project uses:
 
-- ESLint (Nuxt flat config + Airbnb base) for code quality
+- ESLint (Nuxt flat config) for code quality
 - Prettier for formatting (including Tailwind class sorting)
 - Husky + lint-staged for pre-commit checks
 
