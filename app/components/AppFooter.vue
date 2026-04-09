@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const links = [
   { label: 'Docs', to: 'https://ui.nuxt.com', target: '_blank' },
-  { label: 'GitHub', to: 'https://github.com/nuxt/ui', target: '_blank' },
+  { label: 'GitHub', to: 'https://github.com/Nov-Two/sbti.git', target: '_blank' },
   { label: 'Twitter', to: 'https://twitter.com/nuxt_js', target: '_blank' },
   { label: 'Status', to: '#' },
   { label: 'Privacy', to: '#' }
