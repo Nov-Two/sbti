@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   modules: ['@nuxt/eslint', '@nuxt/ui', '@vueuse/nuxt', 'motion-v/nuxt'],
 
-  components: [{ path: '~/components/shared', pathPrefix: false }],
+  components: [{ path: '~/components', pathPrefix: false }],
 
   devtools: {
     enabled: true
