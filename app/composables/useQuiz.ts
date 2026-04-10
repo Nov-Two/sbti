@@ -1,27 +1,34 @@
-import { computed, ref } from 'vue'
-import { sbtiQuestions, type SbtiOption } from '~/data/sbti/questions'
+/**
+ * @fileoverview 单套测验会话：题目列表、当前索引、答案映射；`definition.id` 变更时重置进度（切换题库）。
+ */
+import { computed, ref, toValue, watch, type MaybeRefOrGetter } from 'vue'
+import type { AnswerMap, NormalizedQuestion, QuizDefinition } from '~/types/quiz'
 
-export interface Question {
-  id: number
-  text: string
-  category: string
-  options: Record<SbtiOption, string>
-}
-
-export type AnswerMap = Partial<Record<number, SbtiOption>>
-
-export const useQuiz = () => {
-  const questions = computed<Question[]>(() =>
-    sbtiQuestions.map(q => ({
+export function useQuiz<TOption extends string>(
+  definition: MaybeRefOrGetter<QuizDefinition<TOption>>
+) {
+  const questions = computed<NormalizedQuestion<TOption>[]>(() => {
+    const d = toValue(definition)
+    return d.questions.map(q => ({
       id: q.id,
       text: q.title,
-      category: 'SBTI · 抽象怪·究极逆天版',
+      category: q.category ?? d.defaultCategory,
       options: q.options
     }))
-  )
+  })
+
+  const optionOrder = computed(() => toValue(definition).optionOrder)
 
   const currentIndex = ref(0)
-  const answers = ref<AnswerMap>({})
+  const answers = ref<AnswerMap<TOption>>({})
+
+  watch(
+    () => toValue(definition).id,
+    () => {
+      currentIndex.value = 0
+      answers.value = {}
+    }
+  )
 
   const currentQuestion = computed(() => questions.value[currentIndex.value])
   const totalQuestions = computed(() => questions.value.length)
@@ -29,7 +36,7 @@ export const useQuiz = () => {
   const isLastQuestion = computed(() => currentIndex.value === totalQuestions.value - 1)
   const isFirstQuestion = computed(() => currentIndex.value === 0)
 
-  const selectAnswer = (questionId: number, value: SbtiOption) => {
+  const selectAnswer = (questionId: number, value: TOption) => {
     answers.value[questionId] = value
   }
 
@@ -61,6 +68,8 @@ export const useQuiz = () => {
   }
 
   return {
+    quizId: computed(() => toValue(definition).id),
+    optionOrder,
     questions,
     currentIndex,
     answers,
