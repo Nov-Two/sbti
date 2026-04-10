@@ -1,4 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+/** Nuxt 全局配置：模块、暗色模式、样式入口、Nitro 预渲染等 */
 export default defineNuxtConfig({
   modules: ['@nuxt/eslint', '@nuxt/ui', '@vueuse/nuxt', 'motion-v/nuxt'],
 
@@ -9,6 +10,12 @@ export default defineNuxtConfig({
   },
 
   css: ['~/assets/css/main.css'],
+
+  colorMode: {
+    preference: 'dark',
+    fallback: 'dark',
+    classSuffix: ''
+  },
 
   compatibilityDate: '2025-01-15',
 
