@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { AnswerMap, Question } from '~/composables/useQuiz'
+import type { AnswerMap, NormalizedQuestion } from '~/types/quiz'
 
 const props = defineProps<{
-  questions: Question[]
+  questions: NormalizedQuestion<string>[]
   currentIndex: number
-  answers: AnswerMap
+  answers: AnswerMap<string>
 }>()
 
 const emit = defineEmits<{
@@ -23,7 +23,8 @@ const answerText = (questionId: number) => {
 <template>
   <div class="mb-10 w-full max-w-3xl px-4">
     <div
-      class="rounded-2xl border border-[#42493626] bg-[#17181b99] p-4 shadow-2xl backdrop-blur-[12px]"
+      class="rounded-2xl border p-4 shadow-2xl backdrop-blur-[12px]"
+      :class="'border-[color:var(--sbti-border-subtle)] bg-[color:var(--sbti-elevated)]/60'"
     >
       <div class="flex flex-wrap justify-center gap-2 sm:gap-3">
         <button
@@ -32,17 +33,18 @@ const answerText = (questionId: number) => {
           class="relative flex h-8 w-8 items-center justify-center rounded-lg border font-mono text-[12px] transition-all duration-200 sm:h-10 sm:w-10 sm:text-[14px]"
           :class="[
             index === currentIndex
-              ? 'border-[#84cc16] bg-[#84cc16] text-[#1f3700] shadow-[0_0_12px_rgba(132,204,22,0.4)]'
+              ? 'border-[color:var(--sbti-accent)] bg-[color:var(--sbti-accent)] text-[color:var(--sbti-on-accent)] shadow-[0_0_12px_color-mix(in_oklch,var(--sbti-accent)_40%,transparent)]'
               : isAnswered(q.id)
-                ? 'border-[#84cc164d] bg-[#84cc161a] text-[#84cc16] hover:bg-[#84cc1633]'
-                : 'border-[#4249364d] text-[#64748b] hover:border-[#84cc1699] hover:text-[#e4e1e6]'
+                ? 'border-[color:var(--sbti-accent)]/30 bg-[color:var(--sbti-accent)]/10 text-[color:var(--sbti-accent)] hover:bg-[color:var(--sbti-accent)]/20'
+                : 'border-[color:var(--sbti-border-subtle)] text-[color:var(--sbti-text-dim)] hover:border-[color:var(--sbti-accent)]/50 hover:text-[color:var(--sbti-text)]'
           ]"
           @click="emit('jump', index)"
         >
           {{ index + 1 }}
           <span
             v-if="answerText(q.id)"
-            class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#101114] text-[10px] text-[#9ee939] ring-1 ring-[#84cc164d]"
+            class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full text-[10px] ring-1"
+            :class="'bg-[color:var(--sbti-page-bg)] text-[color:var(--sbti-accent-bright)] ring-[color:var(--sbti-accent)]/30'"
           >
             {{ answerText(q.id) }}
           </span>

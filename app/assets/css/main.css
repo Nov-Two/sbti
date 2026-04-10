@@ -22,12 +22,66 @@
   --color-lime-950: #15300b;
 }
 
+/* 强调色皮肤（data-accent 由 useAccentTheme 写入 html） */
+html {
+  --sbti-accent: #84cc16;
+  --sbti-accent-bright: #9ee939;
+  --sbti-on-accent: #1f3700;
+}
+
+html[data-accent='violet'] {
+  --sbti-accent: #8b5cf6;
+  --sbti-accent-bright: #a78bfa;
+  --sbti-on-accent: #faf5ff;
+}
+
+html[data-accent='cyan'] {
+  --sbti-accent: #06b6d4;
+  --sbti-accent-bright: #22d3ee;
+  --sbti-on-accent: #082f49;
+}
+
+html[data-accent='amber'] {
+  --sbti-accent: #f59e0b;
+  --sbti-accent-bright: #fbbf24;
+  --sbti-on-accent: #422006;
+}
+
+/* 明暗模式：仅换表面与文字色，结构不变 */
+html.dark,
 .dark {
+  --sbti-page-bg: #101114;
+  --sbti-surface: #131316;
+  --sbti-elevated: #17181b;
+  --sbti-border-subtle: rgba(66, 73, 54, 0.12);
+  --sbti-text: #e4e1e6;
+  --sbti-text-muted: #94a3b8;
+  --sbti-text-dim: #64748b;
+  --sbti-nav-bg: rgba(19, 19, 22, 0.6);
+  --sbti-ring: var(--sbti-accent);
   --ui-bg: #101114;
   --ui-bg-muted: #17181b;
   --ui-bg-elevated: #17181b;
   --ui-bg-accented: #2a2d31;
   --ui-border: #2a2d31;
+}
+
+html.light,
+.light {
+  --sbti-page-bg: #f8fafc;
+  --sbti-surface: #ffffff;
+  --sbti-elevated: #f1f5f9;
+  --sbti-border-subtle: rgba(15, 23, 42, 0.12);
+  --sbti-text: #0f172a;
+  --sbti-text-muted: #475569;
+  --sbti-text-dim: #64748b;
+  --sbti-nav-bg: rgba(255, 255, 255, 0.82);
+  --sbti-ring: var(--sbti-accent);
+  --ui-bg: #f8fafc;
+  --ui-bg-muted: #f1f5f9;
+  --ui-bg-elevated: #ffffff;
+  --ui-bg-accented: #e2e8f0;
+  --ui-border: #e2e8f0;
 }
 
 .sbti-container {

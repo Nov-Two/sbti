@@ -1,37 +1,29 @@
 <script setup lang="ts">
-const features = [
-  {
-    title: 'Scientific Validation',
-    description:
-      'Our assessment undergoes continuous peer-review and data analysis to ensure its psychometric reliability remains industry-leading.',
-    icon: '/images/mnrji1am-2zhfhzt.svg'
-  },
-  {
-    title: 'Hyper-Efficient Design',
-    description:
-      'Through advanced algorithmic branching, we pinpoint your type in under 5 minutes—respecting your time while maintaining accuracy.',
-    icon: '/images/mnrji1an-qguh91c.svg'
-  },
-  {
-    title: 'Actionable Growth',
-    description:
-      "We don't just give you a label. We provide specific, personalized blueprints for career growth, relationship dynamics, and self-mastery.",
-    icon: '/images/mnrji1an-4dkzqyd.svg'
-  }
-]
+import { useAppStrings } from '~/composables/useAppStrings'
+
+const strings = useAppStrings()
+
+const features = computed(() => {
+  const icons = [
+    '/images/mnrji1am-2zhfhzt.svg',
+    '/images/mnrji1an-qguh91c.svg',
+    '/images/mnrji1an-4dkzqyd.svg'
+  ]
+  return strings.value.home.features.items.map((item, i) => ({
+    ...item,
+    icon: icons[i] ?? icons[0]
+  }))
+})
 </script>
 
 <template>
   <UContainer class="py-24 sm:py-32">
     <div class="mb-16 text-center">
-      <h2 class="text-3xl font-bold tracking-tight text-white sm:text-5xl">
-        Why the world is switching to SBTI
+      <h2 class="text-3xl font-bold tracking-tight text-[color:var(--sbti-text)] sm:text-5xl">
+        {{ strings.home.features.heading }}
       </h2>
-      <p class="mt-4 text-lg text-slate-400">
-        We've modernized depth psychology to fit the pace of the 21st century without<br
-          class="hidden sm:block"
-        />
-        sacrificing the rigor of classic Jungian theory.
+      <p class="mt-4 text-lg text-[color:var(--sbti-text-muted)]">
+        {{ strings.home.features.sub }}
       </p>
     </div>
 
@@ -39,16 +31,18 @@ const features = [
       <UCard
         v-for="feature in features"
         :key="feature.title"
-        :ui="{ root: 'bg-[#17181B] ring-1 ring-white/5 rounded-2xl' }"
-        class="hover:ring-primary-400/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(159,232,112,0.1)]"
+        :ui="{
+          root: 'bg-[color:var(--sbti-elevated)] ring-1 ring-white/5 rounded-2xl dark:ring-white/5'
+        }"
+        class="transition-all duration-300 hover:shadow-[0_0_30px_color-mix(in_oklch,var(--sbti-accent)_12%,transparent)]"
       >
         <div class="mb-6 flex size-12 items-center justify-center rounded-xl bg-white/5">
           <img :src="feature.icon" :alt="feature.title" class="size-6" />
         </div>
-        <h3 class="mb-3 text-xl font-bold text-white">
+        <h3 class="mb-3 text-xl font-bold text-[color:var(--sbti-text)]">
           {{ feature.title }}
         </h3>
-        <p class="text-sm leading-relaxed text-slate-400">
+        <p class="text-sm leading-relaxed text-[color:var(--sbti-text-muted)]">
           {{ feature.description }}
         </p>
       </UCard>

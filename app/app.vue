@@ -1,23 +1,30 @@
 <script setup lang="ts">
 const colorMode = useColorMode()
+const app = useAppConfig()
+const { locale } = useAppLocale()
+const { accent } = useAccentTheme()
+const strings = useAppStrings()
 
-const color = computed(() => (colorMode.value === 'dark' ? '#101114' : 'white'))
+const themeColorMeta = computed(() =>
+  colorMode.value === 'dark' ? 'var(--sbti-page-bg, #101114)' : '#f8fafc'
+)
 
-useHead({
+useHead(() => ({
   meta: [
     { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-    { key: 'theme-color', name: 'theme-color', content: color }
+    { key: 'theme-color', name: 'theme-color', content: themeColorMeta.value }
   ],
   link: [{ rel: 'icon', href: '/favicon.ico' }],
   htmlAttrs: {
-    lang: 'en',
-    class: 'dark'
+    lang: locale.value === 'en-US' ? 'en' : 'zh-CN',
+    'data-accent': accent.value
   }
-})
+}))
 
 useSeoMeta({
-  title: 'SBTI - Discover your Kinetic potential.',
-  ogImage: '/images/mnrji1as-a2h0xjr.png',
+  title: () => strings.value.meta.title,
+  description: () => strings.value.meta.description,
+  ogImage: app.site.ogImage,
   twitterCard: 'summary_large_image'
 })
 </script>

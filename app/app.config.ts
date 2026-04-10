@@ -1,4 +1,10 @@
 export default defineAppConfig({
+  /** 与测验内容无关的站点信息：换品牌 / SEO 主要改这里（标题与描述见 locales） */
+  site: {
+    name: 'TEST TI',
+    ogImage: '/images/mnrji1as-a2h0xjr.png',
+    githubUrl: 'https://github.com/Nov-Two/sbti'
+  },
   ui: {
     colors: {
       primary: 'lime',

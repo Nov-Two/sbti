@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useAppStrings } from '~/composables/useAppStrings'
+
 defineProps<{
   isFirst: boolean
   isLast: boolean
@@ -8,34 +10,35 @@ defineProps<{
 defineEmits<{
   (e: 'prev' | 'next' | 'submit'): void
 }>()
+
+const strings = useAppStrings()
 </script>
 
 <template>
   <div class="mt-12 flex w-full max-w-3xl items-center justify-between px-4">
-    <!-- Previous Button -->
     <UButton
       v-if="!isFirst"
       color="neutral"
       variant="ghost"
       size="lg"
-      class="flex items-center gap-2 font-mono text-[14px] text-[#94a3b8] transition-colors hover:text-[#c1cab0]"
+      class="flex items-center gap-2 font-mono text-[14px] text-[color:var(--sbti-text-muted)] transition-colors hover:text-[color:var(--sbti-text)]"
       @click="$emit('prev')"
     >
       <UIcon name="i-heroicons-arrow-left" class="h-4 w-4" />
-      Previous
+      {{ strings.quiz.previous }}
     </UButton>
     <div v-else class="w-10" />
 
-    <!-- Next / Submit Button -->
     <UButton
       v-if="!isLast"
       color="primary"
       size="xl"
-      class="relative h-14 min-w-[210px] items-center justify-between rounded-full bg-[linear-gradient(133.83deg,#9ee939_1.13%,#84cc16_98.87%)] px-10 text-[16px] font-bold text-[#1f3700] shadow-[0_10px_15px_-3px_rgba(158,233,57,0.2)] transition-transform hover:-translate-y-px active:translate-y-0 disabled:opacity-50"
+      class="relative h-14 min-w-[210px] items-center justify-between rounded-full px-10 text-[16px] font-bold shadow-[0_10px_15px_-3px_color-mix(in_oklch,var(--sbti-accent-bright)_20%,transparent)] transition-transform hover:-translate-y-px active:translate-y-0 disabled:opacity-50"
+      :class="'bg-[linear-gradient(133.83deg,var(--sbti-accent-bright)_1.13%,var(--sbti-accent)_98.87%)] text-[color:var(--sbti-on-accent)]'"
       :disabled="!hasAnswer"
       @click="$emit('next')"
     >
-      <span>Next Question</span>
+      <span>{{ strings.quiz.next }}</span>
       <UIcon name="i-heroicons-arrow-right" class="h-4 w-4" />
     </UButton>
 
@@ -43,11 +46,12 @@ defineEmits<{
       v-else
       color="primary"
       size="xl"
-      class="relative h-14 min-w-[210px] items-center justify-between rounded-full bg-[linear-gradient(133.83deg,#9ee939_1.13%,#84cc16_98.87%)] px-10 text-[16px] font-bold text-[#1f3700] shadow-[0_10px_15px_-3px_rgba(158,233,57,0.2)] transition-transform hover:-translate-y-px active:translate-y-0 disabled:opacity-50"
+      class="relative h-14 min-w-[210px] items-center justify-between rounded-full px-10 text-[16px] font-bold shadow-[0_10px_15px_-3px_color-mix(in_oklch,var(--sbti-accent-bright)_20%,transparent)] transition-transform hover:-translate-y-px active:translate-y-0 disabled:opacity-50"
+      :class="'bg-[linear-gradient(133.83deg,var(--sbti-accent-bright)_1.13%,var(--sbti-accent)_98.87%)] text-[color:var(--sbti-on-accent)]'"
       :disabled="!hasAnswer"
       @click="$emit('submit')"
     >
-      <span>View Results</span>
+      <span>{{ strings.quiz.submit }}</span>
       <UIcon name="i-heroicons-sparkles" class="h-4 w-4" />
     </UButton>
   </div>

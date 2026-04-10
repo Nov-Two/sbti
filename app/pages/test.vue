@@ -1,9 +1,60 @@
 <script setup lang="ts">
+/**
+ * 测验页：Cookie 选题库 id → 内置 `getQuizRuntime` 或自定义 `useCustomQuiz.runtimeModuleFor`，
+ * 统一 `useQuiz(definition)`；提交时用当前模块 `computeResult` 生成 `QuizResultPayload`。
+ */
 import { useQuiz } from '~/composables/useQuiz'
-import type { SbtiOption } from '~/data/sbti/questions'
-import { generateSbtiResult, type SbtiResult } from '~/utils/sbti'
+import { useAppStrings } from '~/composables/useAppStrings'
+import { useQuizBank } from '~/composables/useQuizBank'
+import { useCustomQuiz } from '~/composables/useCustomQuiz'
+import { getQuizRuntime } from '~/quiz/registry'
+import type { QuizBankId } from '~/types/quiz'
+import type { QuizResultPayload } from '~/types/quiz-result'
+
+const strings = useAppStrings()
+const { bankId, setBankId } = useQuizBank()
+const customQuiz = useCustomQuiz()
+
+const quizModule = computed(() => {
+  const id = bankId.value as string
+  if (id.startsWith('custom:')) {
+    const m = customQuiz.runtimeModuleFor(id as QuizBankId)
+    if (m) return m
+  }
+  if (id === 'sbti' || id === 'youth-stress') {
+    return getQuizRuntime(id)
+  }
+  return getQuizRuntime('sbti')
+})
+
+const definition = computed(() => quizModule.value.definition)
+
+onMounted(() => {
+  customQuiz.migrateV1IfNeeded()
+  const id = bankId.value as string
+  if (id === 'custom') {
+    const first = customQuiz.entries.value[0]
+    setBankId(first ? (`custom:${first.id}` as QuizBankId) : 'sbti')
+    return
+  }
+  if (id.startsWith('custom:') && !customQuiz.runtimeModuleFor(id as QuizBankId)) {
+    setBankId('sbti')
+  }
+})
+
+watch(
+  () => [bankId.value, customQuiz.entries.value.map(e => e.id).join(',')] as [string, string],
+  () => {
+    const id = bankId.value as string
+    if (id.startsWith('custom:') && !customQuiz.runtimeModuleFor(id as QuizBankId)) {
+      setBankId('sbti')
+    }
+  },
+  { immediate: true }
+)
 
 const {
+  optionOrder,
   questions,
   currentIndex,
   answers,
@@ -18,13 +69,13 @@ const {
   jumpToQuestion,
   isQuestionAnswered,
   resetQuiz
-} = useQuiz()
+} = useQuiz(definition)
 
 const toast = useToast()
 const isSubmitted = ref(false)
-const result = ref<SbtiResult | null>(null)
+const result = ref<QuizResultPayload | null>(null)
 
-const handleAnswer = (value: SbtiOption) => {
+const handleAnswer = (value: string) => {
   if (currentQuestion.value) {
     selectAnswer(currentQuestion.value.id, value)
   }
@@ -35,8 +86,8 @@ const handleNext = () => {
   if (!q) return
   if (answers.value[q.id] === undefined) {
     toast.add({
-      title: 'Wait!',
-      description: 'Please select an answer before moving to the next question.',
+      title: strings.value.quiz.waitNeedAnswerTitle,
+      description: strings.value.quiz.waitNeedAnswerDesc,
       color: 'primary',
       icon: 'i-heroicons-exclamation-circle'
     })
@@ -50,8 +101,8 @@ const handleSubmit = () => {
   if (!q) return
   if (answers.value[q.id] === undefined) {
     toast.add({
-      title: 'Wait!',
-      description: 'Please select an answer for the final question.',
+      title: strings.value.quiz.waitFinalTitle,
+      description: strings.value.quiz.waitFinalDesc,
       color: 'primary',
       icon: 'i-heroicons-exclamation-circle'
     })
@@ -61,8 +112,8 @@ const handleSubmit = () => {
   const firstUnanswered = questions.value.findIndex(item => !isQuestionAnswered(item.id))
   if (firstUnanswered !== -1) {
     toast.add({
-      title: '还有未完成的题目',
-      description: `请先完成第 ${firstUnanswered + 1} 题`,
+      title: strings.value.quiz.unfinishedTitle,
+      description: strings.value.quiz.unfinishedDesc(firstUnanswered + 1),
       color: 'primary',
       icon: 'i-heroicons-exclamation-circle'
     })
@@ -70,7 +121,7 @@ const handleSubmit = () => {
     return
   }
 
-  result.value = generateSbtiResult(answers.value)
+  result.value = quizModule.value.computeResult(answers.value)
   isSubmitted.value = true
 }
 
@@ -89,14 +140,20 @@ const currentAnswer = computed(() => {
   if (!q) return undefined
   return answers.value[q.id]
 })
+
+watch(bankId, () => {
+  isSubmitted.value = false
+  result.value = null
+})
 </script>
 
 <template>
   <div
-    class="flex min-h-[calc(100vh-65px-121px)] w-full flex-col items-center bg-[#101114] px-4 py-12 sm:py-20"
+    class="flex min-h-[calc(100vh-65px-121px)] w-full flex-col items-center bg-[color:var(--sbti-page-bg)] px-4 py-12 sm:py-20"
   >
+    <QuizBankControls class="mb-8 w-full max-w-3xl" />
+
     <div v-if="!isSubmitted && currentQuestion" class="flex w-full flex-col items-center">
-      <!-- Progress Bar -->
       <QuizProgress
         :current-step="currentIndex + 1"
         :total-steps="totalQuestions"
@@ -104,7 +161,6 @@ const currentAnswer = computed(() => {
         :progress="progress"
       />
 
-      <!-- Answer Sheet Widget -->
       <QuizAnswerSheet
         :questions="questions"
         :current-index="currentIndex"
@@ -112,16 +168,15 @@ const currentAnswer = computed(() => {
         @jump="handleJump"
       />
 
-      <!-- Question Card -->
       <QuizQuestion :question-text="currentQuestion.text">
         <QuizOptions
           :model-value="currentAnswer"
           :options="currentQuestion.options"
+          :option-order="optionOrder"
           @update:model-value="handleAnswer"
         />
       </QuizQuestion>
 
-      <!-- Navigation Actions -->
       <QuizNavigation
         :is-first="isFirstQuestion"
         :is-last="isLastQuestion"
@@ -132,7 +187,6 @@ const currentAnswer = computed(() => {
       />
     </div>
 
-    <!-- Result Section -->
     <div v-else class="flex w-full flex-col items-center">
       <QuizResult v-if="result" :result="result" @restart="handleRestart" />
     </div>

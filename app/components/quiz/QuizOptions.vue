@@ -1,38 +1,35 @@
 <script setup lang="ts">
-import type { SbtiOption } from '~/data/sbti/questions'
-
 const props = defineProps<{
-  modelValue?: SbtiOption
-  options: Record<SbtiOption, string>
+  modelValue?: string
+  options: Record<string, string>
+  optionOrder: readonly string[]
 }>()
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: SbtiOption): void
+  (e: 'update:modelValue', value: string): void
 }>()
 
-const optionKeys: SbtiOption[] = ['A', 'B', 'C', 'D']
-
-const buttonClass = (key: SbtiOption) => {
+const buttonClass = (key: string) => {
   const isSelected = props.modelValue === key
   return isSelected
-    ? 'border-[#84cc16] bg-[#84cc16] text-[#1f3700] shadow-[0_0_24px_rgba(132,204,22,0.7)]'
-    : 'border-[#4249364d] bg-[#17181b66] text-[#e4e1e6] hover:border-[#84cc1699] hover:bg-[#17181bcc]'
+    ? 'border-[color:var(--sbti-accent)] bg-[color:var(--sbti-accent)] text-[color:var(--sbti-on-accent)] shadow-[0_0_24px_color-mix(in_oklch,var(--sbti-accent)_45%,transparent)]'
+    : 'border-[color:var(--sbti-border-subtle)] bg-[color:var(--sbti-elevated)]/40 text-[color:var(--sbti-text)] hover:border-[color:var(--sbti-accent)]/60 hover:bg-[color:var(--sbti-elevated)]/80'
 }
 
-const badgeClass = (key: SbtiOption) => {
+const badgeClass = (key: string) => {
   const isSelected = props.modelValue === key
   return isSelected
-    ? 'bg-[#101114] text-[#84cc16] ring-[#1f3700]'
-    : 'bg-[#101114] text-[#64748b] ring-[#4249364d]'
+    ? 'bg-[color:var(--sbti-page-bg)] text-[color:var(--sbti-accent)] ring-[color:var(--sbti-on-accent)]'
+    : 'bg-[color:var(--sbti-page-bg)] text-[color:var(--sbti-text-dim)] ring-[color:var(--sbti-border-subtle)]'
 }
 </script>
 
 <template>
   <div class="mt-8 grid w-full grid-cols-1 gap-3 sm:grid-cols-2">
     <button
-      v-for="key in optionKeys"
+      v-for="key in optionOrder"
       :key="key"
-      class="group relative flex w-full items-start gap-4 rounded-2xl border px-4 py-4 text-left transition-all duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#9ee939]"
+      class="group relative flex w-full items-start gap-4 rounded-2xl border px-4 py-4 text-left transition-all duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--sbti-ring)]"
       :class="buttonClass(key)"
       @click="emit('update:modelValue', key)"
     >
@@ -44,16 +41,20 @@ const badgeClass = (key: SbtiOption) => {
       </span>
 
       <span class="flex-1 text-[16px] leading-[22px]">
-        {{ props.options[key] }}
+        {{ options[key] }}
       </span>
 
       <span class="mt-1 flex h-6 w-6 items-center justify-center">
         <UIcon
-          v-if="props.modelValue === key"
+          v-if="modelValue === key"
           name="i-heroicons-check-circle"
-          class="h-6 w-6 text-[#1f3700]"
+          class="h-6 w-6 text-[color:var(--sbti-on-accent)]"
         />
-        <UIcon v-else name="i-heroicons-circle-stack" class="h-6 w-6 text-[#424936]" />
+        <UIcon
+          v-else
+          name="i-heroicons-circle-stack"
+          class="h-6 w-6 text-[color:var(--sbti-text-dim)]"
+        />
       </span>
     </button>
   </div>
